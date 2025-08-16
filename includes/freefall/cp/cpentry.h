@@ -4,6 +4,8 @@
 
 #include <stdint.h>
 
+#include <cptags.h>
+
 #pragma once
 
 typedef struct cp_as_class {
@@ -46,3 +48,11 @@ typedef struct jvm_cp_entry_t {
         cp_as_utf8 as_utf8;
     };
 } jvm_cp_entry_t;
+
+#define CP_ENTRY_TO_UTF8(classfile, idx, var) \
+    if(idx == 0 || idx>=classFile->cp_entry_count) var = NULL; \
+    jvm_cp_entry_t* entry = &classFile->cp_entries[idx]; \
+    if(entry->tag != UTF8) var = NULL; \
+    var = entry->as_utf8.bytes; \
+
+    

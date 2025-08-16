@@ -14,7 +14,7 @@ typedef struct jvm_class_file_t {
     uint16_t jdk_major;
 
     uint16_t cp_entry_count;
-    jvm_cp_entry_t* entries;
+    jvm_cp_entry_t* cp_entries;
 
     uint16_t access_flags;
     uint16_t this_class;
