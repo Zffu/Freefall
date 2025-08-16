@@ -17,3 +17,13 @@ typedef struct jvm_method_info_t {
 
     jvm_code_attrib_t code;
 } jvm_method_info_t;
+
+/**
+ * @name jvm_read_code_attrib
+ * 
+ * Reads the code attribute struct from the given bytes
+ * 
+ * @param p the bytes
+ * @param out the out pointer
+ */
+void jvm_read_code_attrib(int8_t** p, jvm_code_attrib_t* out);
