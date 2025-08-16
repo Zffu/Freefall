@@ -6,9 +6,11 @@
 #include <freefall/cp/cpentry.h>
 #include <freefall/struct/method.h>
 
+#define JVM_CLASS_MAGIC 0xCAFEBABE
+
 typedef struct jvm_class_file_t {
-    uint8_t* buff;
-    size_t len;
+    //uint8_t* buff;
+    //size_t len;
 
     uint16_t jdk_minor;
     uint16_t jdk_major;
@@ -27,3 +29,13 @@ typedef struct jvm_class_file_t {
     jvm_method_info_t* methods;
 
 } jvm_class_file_t;
+
+/**
+ * @name jvm_read_class
+ * 
+ * Reads the class file.
+ * 
+ * @param path the file path
+ * @param out the out pointer of the class file
+ */
+void jvm_read_class(char* path, jvm_class_file_t* out);
