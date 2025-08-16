@@ -103,3 +103,50 @@ void jvm_read_class(char* path, jvm_class_file_t* out) {
         ptr += alen;
     }    
 }
+
+jvm_method_info_t* jvm_find_method(jvm_class_file_t* file, const char* name, const char* desc) {
+    for(uint16_t i = 0; i < file->method_count; ++i) {
+        jvm_method_info_t* info = &file->methods[i];
+
+        char* n;
+        char* d;
+
+        CP_ENTRY_TO_UTF8(file, info->name_index, n);
+        CP_ENTRY_TO_UTF8(file, info->descriptor_index, d);
+    
+        if(strcmp(n, name) == 0 && strcmp(d, desc) == 0) return info;
+    }
+    
+    return NULL;
+}
+
+jvm_method_info_t* jvm_find_method_in_clazz(jvm_class_file_t* file, uint16_t methodref_ind, jvm_resolved_method_t* out) {
+    jvm_cp_entry_t* entry = &file->cp_entries[methodref_ind];
+    if(entry->cp_tag != METHOD_REFERENCE) return;
+
+    jvm_cp_entry_t* cls = &file->cp_entries[entry->as_methodref.name_ind];
+    if(cls->cp_tag != CLASS) return;
+
+    char* clsname;
+    CP_ENTRY_TO_UTF8(file, cls->as_class.name_ind, clsname);
+
+    jvm_cp_entry_t* nt = &file->cp_entries[entry->as_methodref.name_and_type_ind];
+    if(nt->cp_tag != NAME_AND_TYPE) return;
+
+    const char* mname;
+    const char* mdesc;
+
+    CP_ENTRY_TO_UTF8(file, nt->as_nameandmethod.name_ind, mname);
+    CP_ENTRY_TO_UTF8(file, nt->as_nameandmethod.descriptor_ind, mdesc);
+
+    jvm_method_info_t* info = jvm_find_method(file, mname, mdesc);
+
+    if(!info) return;
+
+    out->class_name = clsname;
+    out->method_name = mname;
+    out->descriptor = mdesc;
+    out->method = info;
+
+    return info;
+}

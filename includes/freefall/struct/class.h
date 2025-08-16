@@ -39,3 +39,7 @@ typedef struct jvm_class_file_t {
  * @param out the out pointer of the class file
  */
 void jvm_read_class(char* path, jvm_class_file_t* out);
+
+jvm_method_info_t* jvm_find_method(jvm_class_file_t* file, const char* name, const char* desc);
+
+jvm_method_info_t* jvm_find_method_in_clazz(jvm_class_file_t* file, uint16_t methodref_ind, jvm_resolved_method_t* out);

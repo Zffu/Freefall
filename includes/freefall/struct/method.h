@@ -18,6 +18,13 @@ typedef struct jvm_method_info_t {
     jvm_code_attrib_t code;
 } jvm_method_info_t;
 
+typedef struct jvm_resolved_method_t {
+    char* class_name;
+    char* method_name;
+    char* descriptor;
+    const jvm_method_info_t* method;
+} jvm_resolved_method_t;    
+
 /**
  * @name jvm_read_code_attrib
  * 
